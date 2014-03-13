@@ -31,7 +31,11 @@ class Chef
       class Homebrew < Package
         # Homebrew packagex
         include Chef::Mixin::ShellOut
-        include ::Homebrew::Mixin
+        begin
+          include ::Homebrew::Mixin
+        rescue => e
+          Chef::Log.debug "cannot load ::Homebrew::Mixin"
+        end
 
         def load_current_resource
           @current_resource = Chef::Resource::Package.new(@new_resource.name)
